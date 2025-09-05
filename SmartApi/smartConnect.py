@@ -180,32 +180,44 @@ class SmartConnect(object):
 
     @property
     def getUserId(self) -> str:
-        """Get the current user ID."""
+        """
+        Get the current user ID.
+        """
         return self.userId
     
     @property
     def getfeedToken(self) -> str:
-        """Get the current feed token."""
+        """
+        Get the current feed token.
+        """
         return self.feed_token
 
     @property
     def getaccessToken(self) -> str:
-        """Get the access token."""
+        """
+        Get the access token.
+        """
         return self.access_token
     
     @property
     def getrefreshToken(self) -> str:
-        """Get the refresh token."""
+        """
+        Get the refresh token.
+        """
         return self.refresh_token
     
     @property
     def login_url(self) -> str:
-        """Generate SmartAPI login URL."""
+        """
+        Generate SmartAPI login URL.
+        """
         return "%s?api_key=%s" % (LOGINURL, self.api_key)
     
     
     def requestHeaders(self) -> dict:
-        """Return HTTP headers for API requests."""
+        """
+        Return HTTP headers for API requests.
+        """
         return {
             "Content-type": self.accept,
             "X-ClientLocalIP": self.clientLocalIP,
@@ -218,25 +230,35 @@ class SmartConnect(object):
         }
 
     def setSessionExpiryHook(self, method) -> None:
-        """Set callback for session expiry event."""
+        """
+        Set callback for session expiry event.
+        """
         if not callable(method):
             raise TypeError("Invalid input type. Only functions are accepted.")
         self.session_expiry_hook = method
 
     def setUserId(self, id: str) -> None:
-        """Set the user ID value."""
+        """
+        Set the user ID value.
+        """
         self.userId = id
 
     def setAccessToken(self, access_token: str) -> None:
-        """Set the access token string."""
+        """
+        Set the access token string.
+        """
         self.access_token = access_token
 
     def setRefreshToken(self, refresh_token: str) -> None:
-        """Set the refresh token string."""
+        """
+        Set the refresh token string.
+        """
         self.refresh_token = refresh_token
 
     def setFeedToken(self, feedToken: str) -> None:
-        """Set the market feed token."""
+        """
+        Set the market feed token.
+        """
         self.feed_token = feedToken
 
 
@@ -246,7 +268,9 @@ class SmartConnect(object):
         method: str, 
         parameters: dict = None
     ) -> dict | bytes:
-        """Make a low-level HTTP API request."""
+        """
+        Make a low-level HTTP API request.
+        """
         params = parameters.copy() if parameters else {}
 
         uri = ROUTES[route].format(**params)
@@ -310,22 +334,30 @@ class SmartConnect(object):
 
 
     def _deleteRequest(self, route: str, params: dict = None) -> dict | bytes:
-        """Alias for sending a DELETE request."""
+        """
+        Alias for sending a DELETE request.
+        """
         return self._request(route, "DELETE", params)
 
 
     def _putRequest(self, route: str, params: dict = None) -> dict | bytes:
-        """Alias for sending a PUT request."""
+        """
+        Alias for sending a PUT request.
+        """
         return self._request(route, "PUT", params)
 
 
     def _postRequest(self, route: str, params: dict = None) -> dict | bytes:
-        """Alias for sending a POST request."""
+        """
+        Alias for sending a POST request.
+        """
         return self._request(route, "POST", params)
 
 
     def _getRequest(self, route: str, params: dict = None) -> dict | bytes:
-        """Alias for sending a GET request."""
+        """
+        Alias for sending a GET request.
+        """
         return self._request(route, "GET", params)
 
 
@@ -380,12 +412,16 @@ class SmartConnect(object):
 
 
     def terminateSession(self, clientCode: str) -> dict:
-        """Log out the current user session."""
+        """
+        Log out the current user session.
+        """
         return self._postRequest("api.logout", {"clientcode": clientCode})
 
 
     def generateToken(self, refresh_token: str) -> dict:
-        """Regenerate JWT and feed tokens."""
+        """
+        Regenerate JWT and feed tokens.
+        """
         response = self._postRequest(
             "api.token", {"refreshToken": refresh_token}
         )
@@ -398,7 +434,9 @@ class SmartConnect(object):
         return response
 
     def renewAccessToken(self) -> dict:
-        """Renew access token using refresh token."""
+        """
+        Renew access token using refresh token.
+        """
         response = self._postRequest('api.refresh', {
             "jwtToken": self.access_token,
             "refreshToken": self.refresh_token,
@@ -413,12 +451,16 @@ class SmartConnect(object):
         return tokenSet
 
     def getProfile(self, refreshToken: str) -> dict:
-        """Fetch user profile using refresh token."""
+        """
+        Fetch user profile using refresh token.
+        """
         return self._getRequest("api.user.profile", {"refreshToken": refreshToken})
 
 
     def placeOrder(self, orderparams: dict) -> str | None:
-        """Place an order and return order ID."""
+        """
+        Place an order and return order ID.
+        """
         params = {k: v for k, v in orderparams.items() if v is not None}
         response = self._postRequest("api.order.place", params)
         
@@ -432,7 +474,9 @@ class SmartConnect(object):
 
 
     def placeOrderFullResponse(self, orderparams: dict) -> dict:
-        """Place order and return full API response."""
+        """
+        Place order and return full API response.
+        """
         params = {k: v for k, v in orderparams.items() if v is not None}
         response = self._postRequest("api.order.placefullresponse", params)
         
@@ -447,13 +491,17 @@ class SmartConnect(object):
 
 
     def modifyOrder(self, orderparams: dict) -> dict:
-        """Modify an existing order."""
+        """
+        Modify an existing order.
+        """
         params = {k: v for k, v in orderparams.items() if v is not None}
         return self._postRequest("api.order.modify", params)
 
 
     def cancelOrder(self, order_id: str, variety: str) -> dict:
-        """Cancel an order by ID and variety."""
+        """
+        Cancel an order by ID and variety.
+        """
         return self._postRequest("api.order.cancel", {"variety": variety, "orderid": order_id})
 
 
@@ -483,63 +531,87 @@ class SmartConnect(object):
 
 
     def orderBook(self) -> dict:
-        """Fetch the current order book."""
+        """
+        Fetch the current order book.
+        """
         return self._getRequest("api.order.book")
 
     def tradeBook(self) -> dict:
-        """Fetch the current trade book."""
+        """
+        Fetch the current trade book.
+        """
         return self._getRequest("api.trade.book")
 
     def rmsLimit(self) -> dict:
-        """Fetch user's RMS limit details."""
+        """
+        Fetch user's RMS limit details.
+        """
         return self._getRequest("api.rms.limit")
 
     def position(self) -> dict:
-        """Fetch user's open positions."""
+        """
+        Fetch user's open positions.
+        """
         return self._getRequest("api.position")
 
     def holding(self) -> dict:
-        """Fetch user's current holdings."""
+        """
+        Fetch user's current holdings.
+        """
         return self._getRequest("api.holding")
 
     def allholding(self) -> dict:
-        """Fetch all holdings including T1."""
+        """
+        Fetch all holdings including T1.
+        """
         return self._getRequest("api.allholding")
 
 
     def convertPosition(self, positionParams: dict) -> dict:
-        """Convert open positions."""
+        """
+        Convert open positions.
+        """
         params = {k: v for k, v in positionParams.items() if v is not None}
         return self._postRequest("api.convert.position", params)
 
 
     def gttCreateRule(self, createRuleParams: dict) -> str:
-        """Create a new GTT rule."""
+        """
+        Create a new GTT rule.
+        """
         params = {k: v for k, v in createRuleParams.items() if v is not None}
         response = self._postRequest("api.gtt.create", params)
         return response['data']['id']
 
 
     def gttModifyRule(self, modifyRuleParams: dict) -> str:
-        """Modify an existing GTT rule."""
+        """
+        Modify an existing GTT rule.
+        """
         params = {k: v for k, v in modifyRuleParams.items() if v is not None}
         response = self._postRequest("api.gtt.modify", params)
         return response['data']['id']
 
 
     def gttCancelRule(self, gttCancelParams: dict) -> dict:
-        """Cancel a GTT rule."""
+        """
+        Cancel a GTT rule.
+        """
         params = {k: v for k, v in gttCancelParams.items() if v is not None}
         return self._postRequest("api.gtt.cancel", params)
 
 
     def gttDetails(self, id: str) -> dict:
-        """Fetch details of a GTT rule."""
+        """
+        Fetch details of a GTT rule.
+        """
         return self._postRequest("api.gtt.details", {"id": id})
 
 
     def gttLists(self, status: list, page: int, count: int) -> dict | str:
-        """List GTT rules by status."""
+        """
+        List GTT rules by status.
+        """
         if isinstance(status, list):
             params = {"status": status, "page": page, "count": count}
             return self._postRequest("api.gtt.list", params)
@@ -568,12 +640,16 @@ class SmartConnect(object):
 
 
     def getOIData(self, historicOIDataParams: dict) -> dict:
-        """Fetch historical open interest data."""
+        """
+        Fetch historical open interest data.
+        """
         params = {k: v for k, v in historicOIDataParams.items() if v is not None}
         return self._postRequest("api.oi.data", params)
 
     def getMarketData(self, mode: str, exchangeTokens: dict) -> dict:
-        """Get market data for given exchange tokens."""
+        """
+        Get market data for given exchange tokens.
+        """
         params = {
             "mode": mode,
             "exchangeTokens": exchangeTokens
@@ -581,7 +657,9 @@ class SmartConnect(object):
         return self._postRequest("api.market.data", params)
 
     def searchScrip(self, exchange: str, searchscrip: str) -> dict:
-        """Search for a scrip in an exchange."""
+        """
+        Search for a scrip in an exchange.
+        """
         params = {
             "exchange": exchange,
             "searchscrip": searchscrip
@@ -604,7 +682,9 @@ class SmartConnect(object):
 
 
     def make_authenticated_get_request(self, url: str, access_token: str) -> dict | None:
-        """Make a GET request with auth header."""
+        """
+        Make a GET request with auth header.
+        """
         headers = self.requestHeaders()
         if access_token:
             headers["Authorization"] = "Bearer " + access_token
@@ -616,7 +696,9 @@ class SmartConnect(object):
 
 
     def individual_order_details(self, qParam: str) -> dict | None:
-        """Fetch details for an individual order."""
+        """
+        Fetch details for an individual order.
+        """
         url = ROOTURL + ROUTES["api.individual.order.details"] + qParam
         try:
             return self.make_authenticated_get_request(url, self.access_token)
@@ -626,49 +708,73 @@ class SmartConnect(object):
 
 
     def getMarginApi(self, params: dict) -> dict:
-        """Get margin info for user and symbols."""
+        """
+        Get margin info for user and symbols.
+        """
         return self._postRequest("api.margin.api", params)
 
     def estimateCharges(self, params: dict) -> dict:
-        """Estimate brokerage and tax charges."""
+        """
+        Estimate brokerage and tax charges.
+        """
         return self._postRequest("api.estimateCharges", params)
 
     def verifyDis(self, params: dict) -> dict:
-        """Verify DIS (depository instruction slip)."""
+        """
+        Verify DIS (depository instruction slip).
+        """
         return self._postRequest("api.verifyDis", params)
 
     def generateTPIN(self, params: dict) -> dict:
-        """Generate TPIN for DIS authorization."""
+        """
+        Generate TPIN for DIS authorization.
+        """
         return self._postRequest("api.generateTPIN", params)
 
     def getTranStatus(self, params: dict) -> dict:
-        """Check transaction status for EDIS."""
+        """
+        Check transaction status for EDIS.
+        """
         return self._postRequest("api.getTranStatus", params)
 
     def optionGreek(self, params: dict) -> dict:
-        """Fetch option greeks data."""
+        """
+        Fetch option greeks data.
+        """
         return self._postRequest("api.optionGreek", params)
 
     def gainersLosers(self, params: dict) -> dict:
-        """Get top gainers and losers."""
+        """
+        Get top gainers and losers.
+        """
         return self._postRequest("api.gainersLosers", params)
 
     def putCallRatio(self) -> dict:
-        """Get put-call ratio data."""
+        """
+        Get put-call ratio data.
+        """
         return self._getRequest("api.putCallRatio")
 
     def nseIntraday(self) -> dict:
-        """Fetch intraday data for NSE."""
+        """
+        Fetch intraday data for NSE.
+        """
         return self._getRequest("api.nseIntraday")
 
     def bseIntraday(self) -> dict:
-        """Fetch intraday data for BSE."""
+        """
+        Fetch intraday data for BSE.
+        """
         return self._getRequest("api.bseIntraday")
 
     def oIBuildup(self, params: dict) -> dict:
-        """Fetch Open Interest buildup data."""
+        """
+        Fetch Open Interest buildup data.
+        """
         return self._postRequest("api.oIBuildup", params)
 
     def _user_agent(self) -> str:
-        """Return custom user agent string."""
+        """
+        Return custom user agent string.
+        """
         return (__title__ + "-python/").capitalize() + __version__
