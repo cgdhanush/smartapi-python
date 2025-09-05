@@ -1,12 +1,12 @@
-import logging
 import struct
 import time
 import ssl
 import json
-
 from websocket import WebSocketApp
 
-logger = logging.getLogger(__name__)
+from SmartApi.loggerConfig import get_logger
+
+logger = get_logger(__name__, level="WARNING")
 
 
 class SmartWebSocketV2(object):

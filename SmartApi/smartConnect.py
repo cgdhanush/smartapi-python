@@ -1,5 +1,4 @@
 import json
-import logging
 import re
 import socket
 import ssl
@@ -10,9 +9,10 @@ from urllib.parse import urljoin
 from requests import get
 
 from SmartApi.version import __version__, __title__
+from SmartApi.loggerConfig import get_logger
 import SmartApi.smartExceptions as ex
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__, level="WARNING")
 
 
 # ROOTURL = "https://openapisuat.angelbroking.com"
