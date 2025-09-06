@@ -82,6 +82,15 @@ ROUTES = {
 
 
 class SmartConnect(object):
+    """
+    Main client class for interacting with the Angel One Smart API.
+    
+    This class handles session management, authentication, and configuration 
+    required to interact with Angel One REST and WebSocket APIs. It supports 
+    token-based authentication, proxy configuration, SSL handling, and 
+    user metadata for secure access.
+    
+    """
     
     accept: str = "application/json"
     userType: str = "USER"
@@ -109,6 +118,66 @@ class SmartConnect(object):
         clientLocalIP: str | None = None,
         privateKey: str | None = None,
     ):
+    
+        """
+        Initialize the SmartConnect instance.
+
+        This constructor sets up the Smart API client with all the necessary 
+        authentication tokens, user information, and configuration needed to 
+        interact with Angel One's REST and WebSocket APIs. It allows you to 
+        manage sessions, make authenticated requests, subscribe to live market 
+        data, and customize connection behavior through proxies, SSL options, 
+        and user metadata.
+
+
+        Parameters
+        ----------
+        api_key : str
+            The Smart API key associated with the developer account.
+        access_token : str, optional
+            Access token received upon successful login.
+        refresh_token : str, optional
+            Refresh token used to renew the session without re-authentication.
+        feed_token : str, optional
+            Token used for subscribing to real-time market data feeds.
+        userId : str, optional
+            Unique identifier of the user (usually Angel One client ID).
+        root : str, optional
+            Base URL for the Smart API (defaults to the production endpoint).
+        debug : bool, optional
+            Enable verbose debug logging (default is False).
+        timeout : int, optional
+            Timeout value (in seconds) for HTTP requests (default is 7 seconds).
+        proxies : dict, optional
+            Dictionary of HTTP/HTTPS proxy settings (if needed for requests).
+        pool : dict, optional
+            Connection pool configuration (currently unused/reserved).
+        disable_ssl : bool, optional
+            Disable SSL verification (default is False). Useful for debugging.
+        accept : str, optional
+            Overrides the default `accept` header ("application/json").
+        userType : str, optional
+            Overrides the default user type ("USER").
+        sourceID : str, optional
+            Overrides the default source identifier ("WEB").
+        Authorization : str, optional
+            Bearer or JWT token to authorize API requests directly.
+        clientPublicIP : str, optional
+            Public IP address of the client (used for audit/tracking).
+        clientMacAddress : str, optional
+            MAC address of the client device (optional metadata).
+        clientLocalIP : str, optional
+            Local IP address of the client machine.
+        privateKey : str, optional
+            RSA private key string used for payload encryption (optional).
+
+        Returns
+        -------
+        None
+            This constructor does not return a value.
+
+        """
+
         self.debug = debug
         self.api_key = api_key
         self.session_expiry_hook = None

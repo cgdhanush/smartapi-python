@@ -73,16 +73,37 @@ class SmartWebSocketV2(object):
         """
         Initialize the SmartWebSocketV2 instance.
 
+        This constructor sets up the WebSocket client with the necessary 
+        credentials and retry configuration for establishing and maintaining 
+        a connection with the Smart API's real-time data feed.
+
         Parameters
         ----------
         auth_token : str
-            JWT auth token received from the Login API.
+            JWT authentication token received from the Smart API login endpoint.
         api_key : str
-            API key from the Smart API account.
+            Unique API key provided for accessing the Smart API.
         client_code : str
-            Angel One account ID.
+            Your Angel One client code (e.g., "D12345").
         feed_token : str
-            Feed token received from the Login API.
+            Token required for subscribing to live market feeds.
+        max_retry_attempt : int, optional
+            Maximum number of reconnection attempts on failure (default is 1).
+        retry_strategy : int, optional
+            Strategy to use for retrying connections:
+            - 0: Fixed delay
+            - 1: Exponential backoff (default is 0).
+        retry_delay : int, optional
+            Base delay in seconds between retries (default is 10).
+        retry_multiplier : int, optional
+            Multiplier applied to delay in case of exponential backoff (default is 2).
+        retry_duration : int, optional
+            Total duration (in seconds) to attempt retries before giving up (default is 60).
+
+        Returns
+        -------
+        None
+            This constructor does not return a value.
         """
 
         self.auth_token = auth_token
@@ -236,7 +257,11 @@ class SmartWebSocketV2(object):
             if mode == 4:
                 for token in token_list:
                         if token.get('exchangeType') != 1:
-                            error_message = f"Invalid ExchangeType:{token.get('exchangeType')} Please check the exchange type and try again it support only 1 exchange type"
+                            error_message = (
+                                f"Invalid ExchangeType: {token.get('exchangeType')}. "
+                                "Please check the exchange type and try again. "
+                                "It supports only one exchange type."
+                            )
                             logger.error(error_message)
                             raise ValueError(error_message)
             
@@ -253,7 +278,10 @@ class SmartWebSocketV2(object):
                 total_tokens = sum(len(token["tokens"]) for token in token_list)
                 quota_limit = 50
                 if total_tokens > quota_limit:
-                    error_message = f"Quota exceeded: You can subscribe to a maximum of {quota_limit} tokens only."
+                    error_message = (
+                        f"Quota exceeded: You can subscribe to a maximum of {quota_limit} "
+                        "tokens only."
+                    )
                     logger.error(error_message)
                     raise Exception(error_message)
 
@@ -507,8 +535,8 @@ class SmartWebSocketV2(object):
         byte_format: str = "I"
     ) -> tuple:
         """
-            Unpack Binary Data to the integer according to the specified byte_format.
-            This function returns the tuple
+        Unpack Binary Data to the integer according to the specified byte_format.
+        This function returns the tuple
         """
         return struct.unpack(self.LITTLE_ENDIAN_BYTE_ORDER + byte_format, binary_data[start:end])
 
@@ -586,36 +614,57 @@ class SmartWebSocketV2(object):
 
     def on_message(self, wsapp: WebSocketApp, message: dict) -> None:
         """
-        Handle incoming text messages from the WebSocket.
+        Handle incoming text messages from the WebSocket server.
+
+        Parameters:
+            wsapp (WebSocketApp): The WebSocket application instance.
+            message (dict): The message payload received from the server.
         """
         pass
 
     def on_data(self, wsapp: WebSocketApp, data: dict) -> None:
         """
-        Handle incoming binary data from the WebSocket.
+        Handle incoming binary data from the WebSocket server.
+
+        Parameters:
+            wsapp (WebSocketApp): The WebSocket application instance.
+            data (dict): The binary data payload received from the server.
         """
         pass
 
     def on_control_message(self, wsapp: WebSocketApp, message: dict) -> None:
         """
-        Handle WebSocket control messages like ping/pong.
+        Handle WebSocket control messages such as ping, pong, or close frames.
+
+        Parameters:
+            wsapp (WebSocketApp): The WebSocket application instance.
+            message (dict): The control message received.
         """
         pass
 
     def on_close(self, wsapp: WebSocketApp) -> None:
         """
         Handle WebSocket connection closure.
+
+        Parameters:
+            wsapp (WebSocketApp): The WebSocket application instance.
         """
         pass
 
     def on_open(self, wsapp: WebSocketApp) -> None:
         """
         Handle WebSocket connection open event.
+
+        Parameters:
+            wsapp (WebSocketApp): The WebSocket application instance.
         """
         pass
 
     def on_error(self, error: Exception) -> None:
         """
-        Handle WebSocket errors.
+        Handle any exceptions or errors raised during the WebSocket connection.
+
+        Parameters:
+            error (Exception): The exception instance containing error details.
         """
         pass
