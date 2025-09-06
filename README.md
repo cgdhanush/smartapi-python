@@ -6,24 +6,47 @@ SmartAPI - Python is a library for interacting with Angel Broking's trading plat
 
 ---
 
-## Installation
+## 🔧 Installation
 
-Use [pip](https://pip.pypa.io/en/stable/) to install:
+Use [pip](https://pip.pypa.io/en/stable/) to install the latest release:
 
 ```bash
 pip install smartapi-python
-````
-
-Install additional dependencies:
-```bash
-pip install -r requirements_dev.txt       # other dependencies
 ```
 
+---
+
+## 🛠️ Dependency Setup
+
+If you want to work with the latest code:
+
+### 1. Clone the repository
+
 ```bash
-pip install pyotp logzero websocket-client
+git clone https://github.com/angel-one/smartapi-python.git
+cd smartapi-python
 ```
 
-For `pycryptodome` (uninstall `pycrypto` first if installed):
+### 2. Install dependencies
+
+```bash
+pip install -r requirements_dev.txt
+```
+
+---
+
+## ⚡ Quick One-Liner (Optional)
+
+To install development dependencies directly without cloning the repo:
+
+```bash
+pip install -r https://raw.githubusercontent.com/angel-one/smartapi-python/main/requirements_dev.txt
+
+```
+
+---
+
+For cryptographic support, install `pycryptodome` (make sure to uninstall `pycrypto` first if it's installed):
 
 ```bash
 pip uninstall pycrypto
