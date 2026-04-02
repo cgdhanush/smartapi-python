@@ -1,4 +1,12 @@
 ![SmartAPI Logo](https://smartapi.angelbroking.com/static/media/Smartapi-Logo-1200x212-Transparent.ef58ca94.png)
+---
+### 📢 SmartAPI Announcement: Static IP Requirement
+
+#### 📌 Overview
+
+As per NSE guidelines for retail algorithmic trading, SmartAPI access now requires a registered Static IP. **🗓 Effective:** 01-Apr-2026  
+
+📚 [More Information](https://smartapi.angelbroking.com/exchange-regulations)
 
 # SmartAPI - Python
 
