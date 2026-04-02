@@ -288,9 +288,9 @@ class SmartWebSocketV2(object):
         """
         headers = {
             "Authorization": self.auth_token,
-            "x-api-key": self.api_key,
-            "x-client-code": self.client_code,
-            "x-feed-token": self.feed_token
+            "x-api-key": str(self.api_key),
+            "x-client-code": str(self.client_code),
+            "x-feed-token": str(self.feed_token)
         }
 
         try:
